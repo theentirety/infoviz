@@ -60,7 +60,7 @@ gulp.task('vendor', function () {
 });
 
 // Scripts
-gulp.task('scripts', ['vendor'], function () {
+gulp.task('scripts', function () {
   return gulp.src('app/scripts/main.js')
     .pipe($.browserify({
       debug: true,
@@ -127,11 +127,11 @@ gulp.task('clean', function () {
 
 // Build
 
-gulp.task('build', ['styles', 'html', 'scripts', 'images']);
+gulp.task('build', ['styles', 'html', 'scripts', 'vendor', 'images']);
 
 // Dev Server
 
-gulp.task('dev', ['styles', 'html', 'scripts', 'images', 'connect', 'watch', 'lint']);
+gulp.task('dev', ['styles', 'html', 'scripts', 'vendor', 'images', 'connect', 'watch', 'lint']);
 
 // Default task
 gulp.task('default', ['clean'], function () {

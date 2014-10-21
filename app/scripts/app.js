@@ -8,11 +8,15 @@
 'use strict';
 
 function App() {
-  console.log('app initialized');
+	var self = this;
+	self.modules = {};
+	ko.applyBindings(self.modules);
+
+	var Auth = require('./components/auth.js');
+
+	self.modules.auth = new Auth();
+
+	return self;
 }
 
 module.exports = App;
-
-App.prototype.beep = function () {
-  console.log('boop');
-};
