@@ -41,17 +41,12 @@ gulp.task('vendor-styles', function () {
 gulp.task('vendor', function () {
   return gulp.src([
     'app/bower_components/jquery/dist/jquery.min.js',
-    // 'app/scripts/vendor/PushNotification.js',
     'app/bower_components/knockout/dist/knockout.js',
     'node_modules/parse/build/parse-latest.js',
     'app/bower_components/underscore/underscore-min.js',
-    // 'app/scripts/vendor/hammer.min.js',
     'app/bower_components/moment/min/moment.min.js',
     'app/bower_components/modernizr/modernizr.js',
-    'app/bower_components/chrono/chrono.min.js',
-    // 'app/scripts/vendor/PhoneFormat.js',
-    // 'app/scripts/vendor/knockout-projections.min.js',
-    // 'app/scripts/vendor/encryption.js'
+    'app/bower_components/chrono/chrono.min.js'
     ])
     .pipe($.concat('vendor.js'))
     .pipe($.uglify())
@@ -117,11 +112,7 @@ gulp.task('images', function () {
 // Clean
 gulp.task('clean', function () {
     return gulp.src([
-      rootFolder + 'index.html',
-      rootFolder + 'templates.html',
-      rootFolder + '/styles',
-      rootFolder + '/scripts',
-      rootFolder + '/images'
+      rootFolder
     ], {read: false}).pipe($.clean());
 });
 
