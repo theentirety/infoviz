@@ -1,0 +1,44 @@
+{
+  "name": "infoviz",
+  "version": "0.0.0",
+  "devDependencies": {
+    "browserify": "~3.29.0",
+    "browserify-shim": "~3.2.2",
+    "debowerify": "~0.5.2",
+    "gulp-clean": "~20.1.3",
+    "gulp": "3.8.8",
+    "gulp-autoprefixer": "~0.0.6",
+    "gulp-browserify": "~0.4.4",
+    "gulp-cache": "~0.1.1",
+    "gulp-concat": "~2.1.7",
+    "gulp-connect": "~0.3.1",
+    "gulp-copy": "~2.3.4",
+    "gulp-csso": "~0.2.3",
+    "gulp-imagemin": "~0.1.5",
+    "gulp-jshint": "~1.4.0",
+    "gulp-load-plugins": "~0.3.0",
+    "gulp-sass": "~0.7.0",
+    "gulp-less": "~0.4.1",
+    "gulp-size": "~0.1.3",
+    "gulp-uglify": "~0.2.1",
+    "gulp-util": "~2.2.14",
+    "jshint-stylish": "~0.1.5",
+    "mocha": "~1.17.1",
+    "parse": "^1.3.0",
+    "should": "~3.1.2"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browser": {
+    "lodash": "./app/bower_components/lodash/dist/lodash.js"
+  },
+  "browserify-shim": {
+    "lodash": "global:lodash"
+  }
+}
