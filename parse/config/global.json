@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "infoviz"
+        }, 
+        "infoviz": {
+            "applicationId": "IDxJt4GrbIN8aC5C2HewP4WiC2CKUnetfvQGTKWE", 
+            "masterKey": "jh7Zjro3xgDNxXM9GblqTzv9nEnkxGqQewBzpcBE"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.1"
+    }
+}

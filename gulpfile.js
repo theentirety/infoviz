@@ -3,6 +3,8 @@
 var gulp = require('gulp');
 var bower = 'app/bower_components';
 var rootFolder = 'dist';
+var deployFolder = 'parse/public';
+var deployMode = false;
 var fs = require('fs');
 var replace = require('gulp-replace');
 
@@ -18,9 +20,10 @@ gulp.task('styles', ['vendor-styles'], function () {
     }))
     .pipe($.autoprefixer('last 1 version'))
     .pipe($.csso())
-    .pipe(gulp.dest(rootFolder + '/styles'))
+    .pipe($.if(deployMode, gulp.dest(deployFolder + '/styles')))
+    .pipe($.if(!deployMode, gulp.dest(rootFolder + '/styles')))
     .pipe($.size())
-    .pipe($.connect.reload());
+    .pipe($.if(!deployMode, $.connect.reload()));
 });
 
 // Styles
@@ -32,9 +35,10 @@ gulp.task('vendor-styles', function () {
     .pipe($.concat('vendor.css'))
     .pipe($.autoprefixer('last 1 version'))
     .pipe($.csso())
-    .pipe(gulp.dest(rootFolder + '/styles'))
+    .pipe($.if(deployMode, gulp.dest(deployFolder + '/styles')))
+    .pipe($.if(!deployMode, gulp.dest(rootFolder + '/styles')))
     .pipe($.size())
-    .pipe($.connect.reload());
+    .pipe($.if(!deployMode, $.connect.reload()));
 });
 
 // Vendor
@@ -50,7 +54,8 @@ gulp.task('vendor', function () {
     ])
     .pipe($.concat('vendor.js'))
     .pipe($.uglify())
-    .pipe(gulp.dest(rootFolder + '/scripts'))
+    .pipe($.if(deployMode, gulp.dest(deployFolder + '/scripts')))
+    .pipe($.if(!deployMode, gulp.dest(rootFolder + '/scripts')))
     .pipe($.size());
 });
 
@@ -68,26 +73,31 @@ gulp.task('scripts', function () {
       external: ['lodash'],
       extensions: ['.js']
     }))
-    // .pipe($.uglify())
-    .pipe(gulp.dest(rootFolder + '/scripts'))
+    .pipe($.if(deployMode, $.uglify()))
+    .pipe($.if(deployMode, gulp.dest(deployFolder + '/scripts')))
+    .pipe($.if(!deployMode, gulp.dest(rootFolder + '/scripts')))
     .pipe($.size())
-    .pipe($.connect.reload());
+    .pipe($.if(!deployMode, $.connect.reload()));
 });
 
 // HTML
 gulp.task('html', ['templates'], function () {
   return gulp.src('app/index.html')
-    .pipe($.copy(rootFolder, {
+    .pipe($.if(deployMode, $.copy(deployFolder, {
       prefix: 1
-    }));
+    })))
+    .pipe($.if(!deployMode, $.copy(rootFolder, {
+      prefix: 1
+    })));
 });
 
 // HTML Templates
 gulp.task('templates', function () {
   return gulp.src('app/templates/*.html')
     .pipe($.concat('templates.html'))
-    .pipe(gulp.dest(rootFolder))
-    .pipe($.connect.reload());
+    .pipe($.if(deployMode, gulp.dest(deployFolder)))
+    .pipe($.if(!deployMode, gulp.dest(rootFolder)))
+    .pipe($.if(!deployMode, $.connect.reload()));
 });
 
 // Lint
@@ -105,7 +115,8 @@ gulp.task('images', function () {
       progressive: true,
       interlaced: true
     })))
-    .pipe(gulp.dest(rootFolder + '/images'))
+    .pipe($.if(deployMode, gulp.dest(deployFolder + '/images')))
+    .pipe($.if(!deployMode, gulp.dest(rootFolder + '/images')))
     .pipe($.size());
 });
 
@@ -116,8 +127,14 @@ gulp.task('clean', function () {
     ], {read: false}).pipe($.clean());
 });
 
-// Build
+// Clean Deploy
+gulp.task('clean-deploy', function () {
+    return gulp.src([
+      deployFolder + '/'
+    ], {read: false}).pipe($.clean());
+});
 
+// Build
 gulp.task('build', ['styles', 'html', 'scripts', 'vendor', 'images']);
 
 // Dev Server
@@ -127,6 +144,12 @@ gulp.task('dev', ['styles', 'html', 'scripts', 'vendor', 'images', 'connect', 'w
 // Default task
 gulp.task('default', ['clean'], function () {
     gulp.start('dev');
+});
+
+// Deploy task
+gulp.task('deploy', ['clean-deploy'], function () {
+	deployMode = true;
+    gulp.start('build');
 });
 
 // Connect
