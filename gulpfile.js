@@ -51,7 +51,8 @@ gulp.task('vendor', function () {
     'app/bower_components/moment/min/moment.min.js',
     'app/bower_components/modernizr/modernizr.js',
     'app/bower_components/chrono/chrono.min.js',
-    'app/bower_components/pagerjs/dist/pager.min.js'
+    'app/bower_components/pagerjs/dist/pager.min.js',
+    'app/scripts/vendor/knockout-projections.min.js'
     ])
     .pipe($.concat('vendor.js'))
     .pipe($.uglify())

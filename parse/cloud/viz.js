@@ -56,3 +56,34 @@ Parse.Cloud.define('getVizLinks', function(request, response) {
 	}
 
 });
+
+// gets the visualization type dos and dont's
+Parse.Cloud.define('getVizDosDonts', function(request, response) {
+
+	Parse.Cloud.useMasterKey();
+	logging.logAPICall('getVizDosDonts', request.params);
+	timestampValid = validation.checkTimestamp(request.params.timestamp);
+
+	if (timestampValid.value) {
+
+		var query = new Parse.Query('DoDont');
+		query.equalTo('vizType', {
+			__type: 'Pointer',
+			className: 'VizType',
+			objectId: request.params.vizId
+		});
+		query.ascending('do');
+		query.find({
+			success: function(dos) {
+				response.success(dos);
+			},
+			error: function(error) {
+				response.error(error);
+			}
+		});
+
+	} else {
+		response.error('Validation failure.');
+	}
+
+});
