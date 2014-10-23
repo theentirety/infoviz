@@ -9,24 +9,27 @@ function Periodic() {
 
 	self.charts = ko.observableArray();
 
-	self.testChartTypes = [
-		'bar',
-		'column',
-		'scatter',
-		'pie',
-		'line',
-		'area'
-	];
-
 	self.Chart = function(type) {
 		var data = {};
 		data.type = type;
 		return data;
 	};
 
-	for (var i = 0; i < self.testChartTypes.length; i++) {
-		self.charts.push(new self.Chart(self.testChartTypes[i]));
-	}
+	self.init = function() {
+
+		Parse.Cloud.run('getVizTypes', {
+			timestamp: moment.utc().valueOf()
+		}, {
+			success: function(result) {
+				self.charts(result);
+			},
+			error: function(error) {
+				// app.myViewModel.errors.showBasic('There was an error loading the search results.');
+			}
+		});
+	};
+
+	self.init();
 
 	return self;
 }

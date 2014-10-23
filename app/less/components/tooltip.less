@@ -10,5 +10,17 @@
 	background-color: fade(#000, 80%);
 	border-radius: 3px;
 	color: fade(#FFF, 90%);
-	padding: 3px 5px;
+	padding: 3px 8px;
+	&::after {
+		content: "";
+		position: absolute;
+		bottom: -8px;
+		margin-left: -8px;
+		left: 50%;
+		border-width: 8px 8px 0;
+		border-style: solid;
+		border-color: fade(#000, 80%) transparent;
+		display: block;
+		width: 0;
+	}
 }

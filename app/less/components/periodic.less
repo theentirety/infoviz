@@ -5,10 +5,22 @@
 
 .infovis-periodic {
 	.infovis-periodic-li {
+		-webkit-transition: all 0.25s ease-in-out;
+		-moz-transition: all 0.25s ease-in-out;
+		transition: all 0.25s ease-in-out;
+		opacity: 0.5;
+		&:hover {
+			opacity: 1;
+			cursor: pointer;
+		}
 		.infovis-periodic-image {
-			border: 1px solid #65B3FF;
+			border: 1px solid #FFF;
 			border-radius: 3px;
-			min-height: 80px;
+			color: #FFF;
+			font-size: 70px;
+			text-align: center;
+			padding: 10px;
+			background-color: transparent !important;
 		}
 	}
 }

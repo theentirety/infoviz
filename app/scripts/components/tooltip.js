@@ -23,10 +23,10 @@ function Tooltip() {
 
 	self.move = function(x, y, width) {
 		var tooltip = $('.infovis-tooltip').first();
-		var tooltipWidth = tooltip.width();
-		var tooltipHeight = tooltip.height();
+		var tooltipWidth = parseInt(tooltip.css('width'));
+		var tooltipHeight = parseInt(tooltip.css('height'));
 		self.x((x + (width / 2) - (tooltipWidth / 2)) + 'px');
-		self.y((y - (tooltipHeight)) + 'px');
+		self.y((y - (tooltipHeight) - 3) + 'px');
 	};
 
 	self.set = function(text) {
@@ -34,7 +34,7 @@ function Tooltip() {
 	};
 
 	self.mouseover = function(item, e) {
-		self.set(item.type);
+		self.set(item.attributes.name);
 		self.show(true);
 		self.move(e.currentTarget.offsetLeft, e.currentTarget.offsetTop, e.currentTarget.offsetWidth);
 	};

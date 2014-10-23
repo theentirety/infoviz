@@ -16,11 +16,14 @@ function App() {
 	var Header = require('./components/header.js');
 	var Periodic = require('./components/periodic.js');
 	var Tooltip = require('./components/tooltip.js');
+	var Details = require('./components/details.js');
+
 
 	self.modules.auth = new Auth();
 	self.modules.header = new Header();
 	self.modules.periodic = new Periodic();
 	self.modules.tooltip = new Tooltip();
+	self.modules.details = new Details();
 
 	return self;
 }

@@ -50,7 +50,8 @@ gulp.task('vendor', function () {
     'app/bower_components/underscore/underscore-min.js',
     'app/bower_components/moment/min/moment.min.js',
     'app/bower_components/modernizr/modernizr.js',
-    'app/bower_components/chrono/chrono.min.js'
+    'app/bower_components/chrono/chrono.min.js',
+    'app/bower_components/pagerjs/dist/pager.min.js'
     ])
     .pipe($.concat('vendor.js'))
     .pipe($.uglify())
@@ -120,6 +121,19 @@ gulp.task('images', function () {
     .pipe($.size());
 });
 
+// Fonts
+gulp.task('fonts', function () {
+  return gulp.src([
+  	'app/fonts/fonts/**/*',
+  	'!app/fonts/icons',
+  	'!app/fonts/demos'
+  	])
+    .pipe($.if(deployMode, gulp.dest(deployFolder + '/fonts')))
+    .pipe($.if(!deployMode, gulp.dest(rootFolder + '/fonts')))
+    .pipe($.size())
+    .pipe($.if(!deployMode, $.connect.reload()));
+});
+
 // Clean
 gulp.task('clean', function () {
     return gulp.src([
@@ -135,11 +149,11 @@ gulp.task('clean-deploy', function () {
 });
 
 // Build
-gulp.task('build', ['styles', 'html', 'scripts', 'vendor', 'images']);
+gulp.task('build', ['styles', 'html', 'scripts', 'vendor', 'images', 'fonts']);
 
 // Dev Server
 
-gulp.task('dev', ['styles', 'html', 'scripts', 'vendor', 'images', 'connect', 'watch', 'lint']);
+gulp.task('dev', ['styles', 'html', 'scripts', 'vendor', 'images', 'fonts', 'connect', 'watch', 'lint']);
 
 // Default task
 gulp.task('default', ['clean'], function () {
@@ -172,7 +186,8 @@ gulp.task('watch', ['connect'], function () {
         'app/less/**/*.less',
         'app/scripts/**/*.js',
         'app/images/**/*',
-        'app/templates/**/*.html'
+        'app/templates/**/*.html',
+        'app/fonts/fonts/**/*'
     ], $.connect.reload);
 
 
@@ -187,4 +202,7 @@ gulp.task('watch', ['connect'], function () {
 
     // Watch .html files
     gulp.watch('app/**/*.html', ['templates']);
+
+    // Watch .font files
+    gulp.watch('app/fonts/fonts/**/*', ['fonts']);
 });

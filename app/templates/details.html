@@ -1,0 +1,10 @@
+<div class="infovis-details row" data-bind="visible: details.visible, with: details.active, css: { active: details.visible }">
+	<h1 class="infovis-details-h1" data-bind="text: attributes.name"></h1>
+	<button class="infovis-details-button" data-bind="click: $root.details.hide">Close</button>
+	<p data-bind="text: attributes.description"></p>
+	<ol class="infovis-details-links" data-bind="foreach: $parent.details.links">
+		<li class="infovis-details-linkitem">
+			<a class="infovis-details-link" data-bind="text: attributes.title, attr: { href: attributes.url }" target="_blank"></a>
+		</li>
+	</ul>
+</div>
