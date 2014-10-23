@@ -1,6 +1,6 @@
 <div class="infovis-periodic row">
 	<ul class="infovis-periodic-ul medium-block-grid-6" data-bind="foreach: periodic.charts">
-		<li class="infovis-periodic-li" data-bind="event: { mouseover: function() { $root.tooltip.show(); $root.tooltip.set($data.type) }, mouseout: function() { $root.tooltip.show(false) } }">
+		<li class="infovis-periodic-li" data-bind="event: { mouseover: function(data, event) { $root.tooltip.mouseover(data, event) }, mouseout: function() { $root.tooltip.show(false) } }">
 			<div class="infovis-periodic-image" data-bind="text: type"></div>
 		</li>
 	</ul>

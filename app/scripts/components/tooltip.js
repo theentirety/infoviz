@@ -9,6 +9,8 @@ function Tooltip() {
 
 	self.visible = ko.observable(false);
 	self.label = ko.observable();
+	self.x = ko.observable('0px');
+	self.y = ko.observable('0px');
 
 	self.show = function(override) {
 		var show = typeof override !== 'undefined' ? override : true;
@@ -19,8 +21,22 @@ function Tooltip() {
 		}
 	}
 
+	self.move = function(x, y, width) {
+		var tooltip = $('.infovis-tooltip').first();
+		var tooltipWidth = tooltip.width();
+		var tooltipHeight = tooltip.height();
+		self.x((x + (width / 2) - (tooltipWidth / 2)) + 'px');
+		self.y((y - (tooltipHeight)) + 'px');
+	};
+
 	self.set = function(text) {
 		self.label(text);
+	};
+
+	self.mouseover = function(item, e) {
+		self.set(item.type);
+		self.show(true);
+		self.move(e.currentTarget.offsetLeft, e.currentTarget.offsetTop, e.currentTarget.offsetWidth);
 	};
 
 	return self;
