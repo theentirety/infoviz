@@ -2,9 +2,19 @@
 	<h1 class="infovis-details-h1" data-bind="text: attributes.name"></h1>
 	<button class="infovis-details-button" data-bind="click: $root.details.hide">Close</button>
 	<p data-bind="text: attributes.description"></p>
-	<ol class="infovis-details-links" data-bind="foreach: $parent.details.links">
-		<li class="infovis-details-linkitem">
-			<a class="infovis-details-link" data-bind="text: attributes.title, attr: { href: attributes.url }" target="_blank"></a>
-		</li>
-	</ul>
+	<div class="infovis-details-links">
+		<!-- ko if: $parent.details.links().length <= 0 && $parent.details.gettingLinks() -->
+		<div class="infovis-spinner icon-remove"></div>
+		<!-- /ko -->
+		<!-- ko if: $parent.details.links().length <= 0 && !$parent.details.gettingLinks() -->
+		<div class="infovis-details-empty">No resource links</div>
+		<!-- /ko -->
+		<!-- ko if: $parent.details.links().length > 0 -->
+		<ol class="infovis-details-linklist" data-bind="foreach: $parent.details.links">
+			<li class="infovis-details-linkitem">
+				<a class="infovis-details-link" data-bind="text: attributes.title, attr: { href: attributes.url }" target="_blank"></a>
+			</li>
+		</ol>
+		<!-- /ko -->
+	</div>
 </div>

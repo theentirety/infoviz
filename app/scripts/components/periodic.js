@@ -8,19 +8,15 @@ function Periodic() {
 	var self = this;
 
 	self.charts = ko.observableArray();
-
-	self.Chart = function(type) {
-		var data = {};
-		data.type = type;
-		return data;
-	};
+	self.gettingCharts = ko.observable(false);
 
 	self.init = function() {
-
+		self.gettingCharts(true);
 		Parse.Cloud.run('getVizTypes', {
 			timestamp: moment.utc().valueOf()
 		}, {
 			success: function(result) {
+				self.gettingCharts(false);
 				self.charts(result);
 			},
 			error: function(error) {

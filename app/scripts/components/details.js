@@ -9,7 +9,8 @@ function Details() {
 
 	self.visible = ko.observable(false);
 	self.active = ko.observable();
-	self.links = ko.observable();
+	self.links = ko.observableArray();
+	self.gettingLinks = ko.observable(false);
 
 	self.show = function(item) {
 		if (self.active()) {
@@ -34,15 +35,17 @@ function Details() {
 
 	self.reset = function() {
 		self.active(null);
-		self.links(null);
+		self.links([]);
 	};
 
 	self.getLinks = function() {
+		self.gettingLinks(true);
 		Parse.Cloud.run('getVizLinks', {
 			vizId: self.active().id,
 			timestamp: moment.utc().valueOf()
 		}, {
 			success: function(result) {
+				self.gettingLinks(false);
 				self.links(result);
 			},
 			error: function(error) {

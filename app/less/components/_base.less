@@ -9,3 +9,37 @@ html, body {
 		color: #FFF;
 	}
 }
+
+.infovis-spin (@duration) {
+    -webkit-animation: spin @duration infinite linear;
+    -moz-animation: spin @duration infinite linear;
+    -ms-animation: spin @duration infinite linear;
+    -o-animation: spin @duration infinite linear;
+    animation: spin @duration infinite linear;
+}
+
+.infovis-spinner {
+	position: absolute;
+	.infovis-spin(.5s);
+	color: fade(#FFF, 80%);
+}
+
+@-webkit-keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+}
+
+@-moz-keyframes spin {
+    to { -moz-transform: rotate(360deg); }
+}
+
+@-ms-keyframes spin {
+    to { -ms-transform: rotate(360deg); }
+}
+
+@-o-keyframes spin {
+    to { -o-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
