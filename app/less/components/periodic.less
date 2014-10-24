@@ -4,6 +4,7 @@
    ========================================================================== */
 
 .infovis-periodic {
+	padding: 0 20px;
 	.infovis-periodic-li {
 		-webkit-transition: all 0.25s ease-in-out;
 		-moz-transition: all 0.25s ease-in-out;
@@ -17,10 +18,31 @@
 			border: 1px solid #FFF;
 			border-radius: 3px;
 			color: #FFF;
-			font-size: 70px;
+			font-size: 5em;
 			text-align: center;
 			padding: 10px;
 			background-color: transparent !important;
 		}
 	}
 }
+
+// Small screens
+@media only screen {
+	.infovis-periodic .infovis-periodic-li .infovis-periodic-image {
+		font-size: 3em;
+	}
+} /* Define mobile styles */
+
+// Medium screens
+@media only screen and (min-width: 40.063em) {
+	.infovis-periodic .infovis-periodic-li .infovis-periodic-image {
+		font-size: 5em;
+	}
+} /* min-width 641px, medium screens */
+
+// Large screens
+@media only screen and (min-width: 64.063em) {
+	.infovis-periodic .infovis-periodic-li .infovis-periodic-image {
+		font-size: 7em;
+	}
+} /* min-width 1025px, large screens */

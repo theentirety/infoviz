@@ -23,7 +23,8 @@ gulp.task('styles', ['vendor-styles'], function () {
     .pipe($.if(deployMode, gulp.dest(deployFolder + '/styles')))
     .pipe($.if(!deployMode, gulp.dest(rootFolder + '/styles')))
     .pipe($.size())
-    .pipe($.if(!deployMode, $.connect.reload()));
+    .pipe($.if(!deployMode, $.connect.reload()))
+    .on('error', $.util.log);
 });
 
 // Styles
@@ -38,7 +39,8 @@ gulp.task('vendor-styles', function () {
     .pipe($.if(deployMode, gulp.dest(deployFolder + '/styles')))
     .pipe($.if(!deployMode, gulp.dest(rootFolder + '/styles')))
     .pipe($.size())
-    .pipe($.if(!deployMode, $.connect.reload()));
+    .pipe($.if(!deployMode, $.connect.reload()))
+    .on('error', $.util.log);
 });
 
 // Vendor
@@ -58,7 +60,8 @@ gulp.task('vendor', function () {
     .pipe($.uglify())
     .pipe($.if(deployMode, gulp.dest(deployFolder + '/scripts')))
     .pipe($.if(!deployMode, gulp.dest(rootFolder + '/scripts')))
-    .pipe($.size());
+    .pipe($.size())
+    .on('error', $.util.log);
 });
 
 // Scripts
@@ -79,7 +82,8 @@ gulp.task('scripts', function () {
     .pipe($.if(deployMode, gulp.dest(deployFolder + '/scripts')))
     .pipe($.if(!deployMode, gulp.dest(rootFolder + '/scripts')))
     .pipe($.size())
-    .pipe($.if(!deployMode, $.connect.reload()));
+    .pipe($.if(!deployMode, $.connect.reload()))
+    .on('error', $.util.log);
 });
 
 // HTML
@@ -90,7 +94,8 @@ gulp.task('html', ['templates'], function () {
     })))
     .pipe($.if(!deployMode, $.copy(rootFolder, {
       prefix: 1
-    })));
+    })))
+    .on('error', $.util.log);
 });
 
 // HTML Templates
@@ -99,7 +104,8 @@ gulp.task('templates', function () {
     .pipe($.concat('templates.html'))
     .pipe($.if(deployMode, gulp.dest(deployFolder)))
     .pipe($.if(!deployMode, gulp.dest(rootFolder)))
-    .pipe($.if(!deployMode, $.connect.reload()));
+    .pipe($.if(!deployMode, $.connect.reload()))
+    .on('error', $.util.log);
 });
 
 // Lint
@@ -107,6 +113,7 @@ gulp.task('lint', ['scripts'], function () {
   return gulp.src('app/scripts/*.js')
     .pipe($.jshint('.jshintrc'))
     .pipe($.jshint.reporter(require('jshint-stylish')))
+    .on('error', $.util.log);
 });
 
 // Images
@@ -119,7 +126,8 @@ gulp.task('images', function () {
     })))
     .pipe($.if(deployMode, gulp.dest(deployFolder + '/images')))
     .pipe($.if(!deployMode, gulp.dest(rootFolder + '/images')))
-    .pipe($.size());
+    .pipe($.size())
+    .on('error', $.util.log);
 });
 
 // Fonts
@@ -132,7 +140,8 @@ gulp.task('fonts', function () {
     .pipe($.if(deployMode, gulp.dest(deployFolder + '/fonts')))
     .pipe($.if(!deployMode, gulp.dest(rootFolder + '/fonts')))
     .pipe($.size())
-    .pipe($.if(!deployMode, $.connect.reload()));
+    .pipe($.if(!deployMode, $.connect.reload()))
+    .on('error', $.util.log);
 });
 
 // Clean
