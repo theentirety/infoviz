@@ -22,6 +22,8 @@ html, body {
 	position: absolute;
 	.infovis-spin(.5s);
 	color: fade(#FFF, 80%);
+	display: inline-block;
+	margin-top: 3px;
 }
 
 @-webkit-keyframes spin {
@@ -42,4 +44,28 @@ html, body {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"] {
+	border: 0px transparent none;
+}
+
+.infovis-button-icon {
+	background-color: transparent;
+	color: fade(#FFF, 70%);
+	font-size: 14px;
+	padding: 0;
+	margin-left: 5px;
+	&:hover {
+		background-color: transparent;
+	}
+	&.icon-add-circle-outline {
+		font-size: 24px;
+		margin-left: 0;
+		margin-top: 5px;
+	}
+	&.icon-close, &.icon-check {
+		font-size: 24px;
+		margin-right: 10px
+	}
 }

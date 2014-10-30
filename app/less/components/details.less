@@ -47,18 +47,56 @@
 	.infovis-details-dosdonts {
 		color: #0B486B;
 		font-size: 14px;
+		.infovis-details-dolist, .infovis-details-dontlist {
+			margin-bottom: 0.5rem;
+		}
 		.infovis-details-doitem {
 			color: #0B486B;
 			font-size: 14px;
 		}
 	}
+
+	.infovis-details-doitem, .infovis-details-linkitem {
+		.infovis-edit-item {
+			opacity: 0;
+			transition: opacity .25s ease-in-out;
+			-moz-transition: opacity .25s ease-in-out;
+			-webkit-transition: opacity .25s ease-in-out;
+		}
+		&:hover {
+			.infovis-edit-item {
+				opacity: 1;
+			}
+		}
+	}
+	.infovis-details-withplus {
+		.infovis-edit-plus {
+			opacity: 0;
+			transition: opacity .25s ease-in-out;
+			-moz-transition: opacity .25s ease-in-out;
+			-webkit-transition: opacity .25s ease-in-out;
+		}
+		&:hover {
+			.infovis-edit-plus {
+				opacity: 1;
+			}
+		}
+	}
+	.infovis-saveitem {
+		font-size: 10px;
+		opacity: 0.5;
+		color: #FFF;
+	}
 	.infovis-details-dosdonts, .infovis-details-links, .infovis-details-description {
 		position: relative;
 		padding-top: 20px;
-		padding-bottom: 40px;
+		padding-bottom: 10px;
 	}
 	.infovis-details-dosdonts, .infovis-details-links {
 		border-top: 1px solid fade(#FFF, 40%);
+		.infovis-details-edititem, .infovis-details-editfield {
+			list-style: none;
+		}
 	}
 	.infovis-details-links, .infovis-details-h1 {
 		padding-left: .9375rem;

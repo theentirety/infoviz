@@ -1,55 +1,91 @@
 <div class="infovis-details" data-bind="with: details.active">
-<div data-bind="page: { id: '?', nameParam: attributes.name }">
-	<h1 class="infovis-details-h1 row">
-		<span data-bind="attr: { class: 'infovis-details-thumb icon-' + attributes.icon }"></span>
-		<span data-bind="text: attributes.name"></span>
-	</h1>
-	<button class="infovis-details-button" data-bind="click: $root.details.hide">Close</button>
-	<div class="infovis-details-description row">
-		<p class="large-8 columns" data-bind="text: attributes.description || 'No description provided'"></p>
-	</div>
-	<div class="infovis-details-dosdonts row">
-		<!-- ko if: $parent.details.dosDonts().length <= 0 && $parent.details.gettingDosDonts() -->
-		<div class="infovis-spinner icon-remove"></div>
-		<!-- /ko -->
-		<!-- ko if: $parent.details.dosDonts().length <= 0 && !$parent.details.gettingDosDonts() -->
-		<div class="infovis-details-empty">Do or do not, but in this case, there is no guidance</div>
-		<!-- /ko -->
-		<div class="large-6 columns" data-bind="visible: $parent.details.dosDonts().length > 0">
-			<h2 class="infovis-details-h2">Do</h2>
-			<ul class="infovis-details-dolist">
-				<!-- ko foreach: $parent.details.doList -->
-				<li class="infovis-details-doitem">
-					<button data-bind="visible: auth.editMode"></button>
-					<span data-bind="text: attributes.description"></span>
+	<div data-bind="page: { id: '?', nameParam: attributes.name}">
+		<h1 class="infovis-details-h1 row">
+			<span data-bind="attr: { class: 'infovis-details-thumb icon-' + attributes.icon }"></span>
+			<span data-bind="text: attributes.name"></span>
+		</h1>
+		<button class="infovis-details-button" data-bind="click: $root.details.hide">Close</button>
+		<div class="row"  data-bind="visible: $root.auth.editMode">
+			<button class="infovis-button-icon icon-create"></button>
+		</div>
+		<div class="infovis-details-description row">
+			<p class="large-8 columns" data-bind="text: attributes.description || 'No description provided'"></p>
+		</div>
+		<div class="infovis-details-dosdonts row" data-bind="with: $root.details">
+			<!-- ko if: dosDonts().length <= 0 && gettingDosDonts -->
+			<div class="infovis-spinner icon-remove"></div>
+			<!-- /ko -->
+			<!-- ko if: dosDonts().length <= 0 && !gettingDosDonts() && !$root.auth.editMode() -->
+			<div class="infovis-details-empty">Do or do not, but in this case, there is no guidance</div>
+			<!-- /ko -->
+			<!-- ko if: dosDonts().length > 0 || $root.auth.editMode -->
+			<div class="large-6 columns infovis-details-withplus">
+				<h2 class="infovis-details-h2">Do</h2>
+				<ul class="infovis-details-dolist">
+					<!-- ko foreach: doList -->
+					<li class="infovis-details-doitem">
+						<span data-bind="text: attributes.description"></span>
+						<button type="button" class="infovis-button-icon icon-create infovis-edit-item" data-bind="visible: $root.auth.editMode() && attributes.editable(), click: $parent.edit"></button>
+						<div class="infovis-spinner icon-remove" data-bind="visible: !attributes.editable()"></div>
+					</li>
+					<!-- /ko -->
+					<li class="infovis-details-edititem" data-bind="visible: $root.auth.editMode() && !editItem(), click: function() { edit(null) }">
+						<button class="infovis-button-icon icon-add-circle-outline infovis-edit-plus"></button>
+					</li>
+					<li class="infovis-details-editfield" data-bind="visible: $root.auth.editMode() && editItem()">
+					<form data-bind="submit: saveDoDont">
+						<input type="text" placeholder="New item..." data-bind="value: newDoDont" />
+						<button type="submit" class="infovis-button-icon icon-check"></button>
+						<button type="button" class="infovis-button-icon icon-close" data-bind="click: cancelEdit"></button>
+					</form>
+					</li>
+				</ul>
+
+			</div>
+			<div class="large-6 columns infovis-details-withplus">
+				<h2 class="infovis-details-h2">Do not</h2>
+				<ul class="infovis-details-dolist">
+					<!-- ko foreach: dontList -->
+					<li class="infovis-details-doitem">
+						<span data-bind="text: attributes.description"></span>
+						<button type="button" class="infovis-button-icon icon-create infovis-edit-item" data-bind="visible: $root.auth.editMode() && attributes.editable(), click: $parent.edit"></button>
+						<div class="infovis-spinner icon-remove" data-bind="visible: !attributes.editable()"></div>
+					</li>
+					<!-- /ko -->
+					<li class="infovis-details-edititem" data-bind="visible: $root.auth.editMode() && !editItem(), click: function() { edit(null) }">
+						<button class="infovis-button-icon icon-add-circle-outline infovis-edit-plus"></button>
+					</li>
+					<li class="infovis-details-editfield" data-bind="visible: $root.auth.editMode() && editItem()">
+					<form data-bind="submit: saveDoDont">
+						<input type="text" placeholder="New item..." data-bind="value: newDoDont" />
+						<button type="submit" class="infovis-button-icon icon-check"></button>
+						<button type="button" class="infovis-button-icon icon-close" data-bind="click: cancelEdit"></button>
+					</form>
+					</li>
+				</ul>
+			</div>
+			<!-- /ko -->
+		</div>
+		<div class="infovis-details-links row infovis-details-withplus" data-bind="with: $root.details">
+			<!-- ko if: links().length <= 0 && gettingLinks() -->
+			<div class="infovis-spinner icon-remove"></div>
+			<!-- /ko -->
+			<!-- ko if: links().length <= 0 && !gettingLinks() && !$root.auth.editMode() -->
+			<div class="infovis-details-empty">No resource links</div>
+			<!-- /ko -->
+			<!-- ko if: links().length > 0 || $root.auth.editMode -->
+			<ol class="infovis-details-linklist">
+				<!-- ko foreach: links -->
+				<li class="infovis-details-linkitem">
+					<a class="infovis-details-link" data-bind="text: attributes.title, attr: { href: attributes.url }" target="_blank"></a>
+					<button type="button" class="infovis-button-icon icon-create infovis-edit-item" data-bind="visible: $root.auth.editMode"></button>
 				</li>
 				<!-- /ko -->
-				<li class="infovis-details-additem">
-					<button class="icon-add" data-bind="auth.editMode"></button>
+				<li class="infovis-details-edititem" data-bind="visible: $root.auth.editMode() && !editItem(), click: function() { edit(null) }">
+					<button class="infovis-button-icon icon-add-circle-outline infovis-edit-plus"></button>
 				</li>
-			</ul>
+			</ol>
+			<!-- /ko -->
 		</div>
-		<div class="large-6 columns" data-bind="visible: $parent.details.dosDonts().length > 0">
-			<h2 class="infovis-details-h2">Do not</h2>
-			<ul class="infovis-details-dontlist" data-bind="foreach: $parent.details.dontList">
-				<li class="infovis-details-doitem" data-bind="text: attributes.description"></li>
-			</ul>
-		</div>
-	</div>
-	<div class="infovis-details-links row">
-		<!-- ko if: $parent.details.links().length <= 0 && $parent.details.gettingLinks() -->
-		<div class="infovis-spinner icon-remove"></div>
-		<!-- /ko -->
-		<!-- ko if: $parent.details.links().length <= 0 && !$parent.details.gettingLinks() -->
-		<div class="infovis-details-empty">No resource links</div>
-		<!-- /ko -->
-		<!-- ko if: $parent.details.links().length > 0 -->
-		<ol class="infovis-details-linklist" data-bind="foreach: $parent.details.links">
-			<li class="infovis-details-linkitem">
-				<a class="infovis-details-link" data-bind="text: attributes.title, attr: { href: attributes.url }" target="_blank"></a>
-			</li>
-		</ol>
-		<!-- /ko -->
-	</div>
 	</div>
 </div>
