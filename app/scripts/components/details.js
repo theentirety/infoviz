@@ -7,7 +7,6 @@
 function Details() {
 	var self = this;
 
-	self.visible = ko.observable(false);
 	self.active = ko.observable();
 	self.links = ko.observableArray();
 	self.gettingLinks = ko.observable(false);
@@ -31,18 +30,21 @@ function Details() {
 			}
 		}
 		self.active(item);
-		self.visible(true);
 		self.getLinks();
 		self.getDosDonts();
 		pager.navigate('#!/'+item.attributes.name);
 	};
 
+	self.load = function(item) {
+		self.active(item);
+		self.getLinks();
+		self.getDosDonts();
+		pager.goTo('#!/'+item.attributes.name);
+	};
+
 	self.hide = function() {
-		self.visible(false);
-		$(document).queue(function() {
-			self.reset();
-			$(document).dequeue();
-		})
+		self.reset();
+		pager.navigate('');
 	};
 
 	self.reset = function() {

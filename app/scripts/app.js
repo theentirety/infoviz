@@ -20,7 +20,6 @@ function App() {
 	var Tooltip = require('./components/tooltip.js');
 	var Details = require('./components/details.js');
 
-
 	self.modules.auth = new Auth();
 	self.modules.header = new Header();
 	self.modules.periodic = new Periodic();
