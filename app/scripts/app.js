@@ -10,7 +10,9 @@
 function App() {
 	var self = this;
 	self.modules = {};
+	pager.extendWithPage(self.modules);
 	ko.applyBindings(self.modules);
+	pager.start();
 
 	var Auth = require('./components/auth.js');
 	var Header = require('./components/header.js');

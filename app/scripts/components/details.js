@@ -34,6 +34,7 @@ function Details() {
 		self.visible(true);
 		self.getLinks();
 		self.getDosDonts();
+		pager.navigate('#!/'+item.attributes.name);
 	};
 
 	self.hide = function() {

@@ -8,6 +8,7 @@ function Auth() {
 	var self = this;
 
 	self.currentUser = ko.observable(false);
+	self.editMode = ko.observable(false);
 
 	// auth.signUpMode = ko.observable(false);
 	// auth.verifyMode = ko.observable(false);
