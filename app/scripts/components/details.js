@@ -49,7 +49,6 @@ function Details() {
 	};
 
 	self.load = function(item) {
-		console.log(item)
 		self.active(item);
 		self.getLinks();
 		self.getDosDonts();
@@ -77,6 +76,20 @@ function Details() {
 			'editing': ko.observable(false)
 		};
 		return item;
+	};
+
+	self.editDescription = function() {
+		self.oldItem = self.active().attributes.description();
+		self.active().attributes.editing(true);
+	};
+
+	self.saveDescription = function(item) {
+		self.active().attributes.editing(false);
+	};
+
+	self.cancelEditDescription = function() {
+		self.active().attributes.description(self.oldItem);
+		self.active().attributes.editing(false);
 	};
 
 	self.Link = function(title, url) {

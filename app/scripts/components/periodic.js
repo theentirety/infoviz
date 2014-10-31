@@ -16,6 +16,11 @@ function Periodic() {
 			timestamp: moment.utc().valueOf()
 		}, {
 			success: function(result) {
+				_.each(result, function(item) {
+					item.attributes.editable = ko.observable(true);
+					item.attributes.editing = ko.observable(false);
+					item.attributes.description = ko.observable(item.attributes.description);
+				});
 				self.gettingCharts(false);
 				self.charts(result);
 				self.loadChart();

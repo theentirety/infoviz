@@ -18,7 +18,6 @@ function Auth() {
 	};
 
 	self.signin = function() {
-		console.log('signin')
 		Parse.FacebookUtils.logIn(null, {
 			success: function(user) {
 				self.currentUser(user);

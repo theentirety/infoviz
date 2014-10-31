@@ -5,11 +5,14 @@
 			<span data-bind="text: attributes.name"></span>
 		</h1>
 		<button class="infovis-details-button icon-close" data-bind="click: $root.details.hide"></button>
-		<div class="row"  data-bind="visible: $root.auth.editMode">
-			<button class="infovis-button-icon icon-create"></button>
-		</div>
 		<div class="infovis-details-description row">
-			<p class="large-8 columns" data-bind="text: attributes.description || 'No description provided'"></p>
+			<span class="large-8 columns" data-bind="text: attributes.description || 'No description provided', visible: !attributes.editing()"></span>
+			<form data-bind="submit: $root.details.saveDescription, visible: attributes.editing">
+				<textarea class="infovis-details-vizdescription" data-bind="value: attributes.description"></textarea>
+				<button type="submit" class="infovis-button-icon icon-check"></button>
+				<button type="button" class="infovis-button-icon icon-close" data-bind="click: $root.details.cancelEditDescription"></button>
+			</form>
+			<button class="infovis-button-icon icon-create" data-bind="click: $root.details.editDescription, visible: $root.auth.editMode() && !attributes.editing() && attributes.editable()"></button>
 		</div>
 		<div class="infovis-details-dosdonts row" data-bind="with: $root.details">
 			<!-- ko if: dosDonts().length <= 0 && gettingDosDonts -->
