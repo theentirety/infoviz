@@ -143,11 +143,12 @@ Parse.Cloud.define('saveLink', function(request, response) {
 		var Link = Parse.Object.extend('Link');
 		var link = new Link();
 
+		link.set('title', request.params.title);
+		link.set('url', request.params.url);
+
 		if (request.params.id) {
 			link.id = request.params.id;
 		} else if (request.params.vizId) {
-			link.set('title', request.params.title);
-			link.set('url', request.params.url);
 			link.set('vizType', {
 				__type: 'Pointer',
 				className: 'VizType',
@@ -157,9 +158,43 @@ Parse.Cloud.define('saveLink', function(request, response) {
 			response.error('Invalid params');
 		}
 
-		doDont.set('description', request.params.description);
+		link.set('description', request.params.description);
+		link.save(null, {
+			success: function(result) {
+				response.success(result);
+			},
+			error: function(error) {
+				response.error(error);
+			}
+		});
 
-		doDont.save(null, {
+	} else {
+		response.error('Validation failure.');
+	}
+
+});
+
+// saves/updates a chart
+Parse.Cloud.define('saveViz', function(request, response) {
+
+	Parse.Cloud.useMasterKey();
+	logging.logAPICall('saveViz', request.params);
+	timestampValid = validation.checkTimestamp(request.params.timestamp);
+
+	if (timestampValid.value) {
+
+		var VizType = Parse.Object.extend('VizType');
+		var viz = new VizType();
+
+		if (request.params.id) {
+			viz.id = request.params.id;
+		} else {
+			response.error('Invalid params');
+		}
+
+		viz.set('description', request.params.description);
+
+		viz.save(null, {
 			success: function(result) {
 				response.success(result);
 			},

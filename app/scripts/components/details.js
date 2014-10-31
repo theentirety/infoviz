@@ -83,8 +83,20 @@ function Details() {
 		self.active().attributes.editing(true);
 	};
 
-	self.saveDescription = function(item) {
+	self.saveDescription = function() {
 		self.active().attributes.editing(false);
+		Parse.Cloud.run('saveViz', {
+			id: self.active().id,
+			description: self.active().attributes.description(),
+			timestamp: moment.utc().valueOf()
+		}, {
+			success: function(result) {
+				self.active().attributes.editable(true);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
 	};
 
 	self.cancelEditDescription = function() {
@@ -104,9 +116,6 @@ function Details() {
 	};
 
 	self.save = function(item, form, listType) {
-		// 	// api call to save
-		// 	// update the id of the item once the item is saved
-		// 	// enable the edit for that item
 		if (item) {
 			item.attributes.editing(false);
 			Parse.Cloud.run('saveDoDont', {
@@ -201,12 +210,42 @@ function Details() {
 
 	self.saveLink = function(item) {
 		if (item) {
+			console.log(item)
 			item.attributes.editing(false);
+			Parse.Cloud.run('saveLink', {
+				id: item.id,
+				title: item.attributes.title(),
+				url: item.attributes.url(),
+				timestamp: moment.utc().valueOf()
+			}, {
+				success: function(result) {
+					item.attributes.editable(true);
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
 		} else if (self.newLinkName() && self.newLinkUrl()) {
-			self.links.push(new self.Link(self.newLinkName(), self.newLinkUrl()));
+			var newListItem = new self.Link(self.newLinkName(), self.newLinkUrl());
+			self.links.push(newListItem);
+			Parse.Cloud.run('saveLink', {
+				vizId: self.active().id,
+				title: self.newLinkName(),
+				url: self.newLinkUrl(),
+				timestamp: moment.utc().valueOf()
+			}, {
+				success: function(result) {
+					newListItem.attributes.editable(true);
+					newListItem.id = result.id;
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
 			self.newLinkUrl(null);
 			self.newLinkName(null);
 		}
+
 		self.editItem(false);
 	};
 
