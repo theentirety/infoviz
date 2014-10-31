@@ -63,8 +63,9 @@ function Details() {
 	self.DoDont = function(doDont, description) {
 		var item = {};
 		item.attributes = {
+			'id': null,
 			'do': doDont,
-			'description': description,
+			'description': ko.observable(description),
 			'editable': ko.observable(false),
 			'editing': ko.observable(false)
 		};
@@ -88,11 +89,40 @@ function Details() {
 		// 	// enable the edit for that item
 		if (item) {
 			item.attributes.editing(false);
+			Parse.Cloud.run('saveDoDont', {
+				id: item.id,
+				description: item.attributes.description(),
+				timestamp: moment.utc().valueOf()
+			}, {
+				success: function(result) {
+					item.attributes.editable(true);
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+
 		} else {
 			var target = $(form).parents('.infovis-details-editfield');
 			target.hide();
 			target.prev().show();
-			self.dosDonts.push(new self.DoDont(listType == 'do' ? true : false, self.newItem()));
+			var doDont = listType == 'do' ? true : false;
+			var newListItem = new self.DoDont(doDont, self.newItem());
+			self.dosDonts.push(newListItem);
+			Parse.Cloud.run('saveDoDont', {
+				vizId: self.active().id,
+				listType: doDont,
+				description: self.newItem(),
+				timestamp: moment.utc().valueOf()
+			}, {
+				success: function(result) {
+					newListItem.attributes.editable(true);
+					newListItem.id = result.id;
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
 			self.newItem(null);
 		}
 		self.editItem(false);

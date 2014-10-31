@@ -87,3 +87,46 @@ Parse.Cloud.define('getVizDosDonts', function(request, response) {
 	}
 
 });
+
+
+// saves/updates a do or don't
+Parse.Cloud.define('saveDoDont', function(request, response) {
+
+	Parse.Cloud.useMasterKey();
+	logging.logAPICall('saveDoDont', request.params);
+	timestampValid = validation.checkTimestamp(request.params.timestamp);
+
+	if (timestampValid.value) {
+
+		var DoDont = Parse.Object.extend('DoDont');
+		var doDont = new DoDont();
+
+		if (request.params.id) {
+			doDont.id = request.params.id;
+		} else if (request.params.vizId) {
+			doDont.set('do', request.params.listType);
+			doDont.set('vizType', {
+				__type: 'Pointer',
+				className: 'VizType',
+				objectId: request.params.vizId
+			});
+		} else {
+			response.error('Invalid params');
+		}
+
+		doDont.set('description', request.params.description);
+
+		doDont.save(null, {
+			success: function(result) {
+				response.success(result);
+			},
+			error: function(error) {
+				response.error(error);
+			}
+		});
+
+	} else {
+		response.error('Validation failure.');
+	}
+
+});
