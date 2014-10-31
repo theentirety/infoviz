@@ -1,10 +1,10 @@
 <div class="infovis-details" data-bind="with: details.active">
-	<div data-bind="page: { id: '?', nameParam: attributes.name}">
+	<div data-bind="page: { id: '?', deep: 'chart', nameParam: function() { $root.details.slug($data.attributes.name) } }">
 		<h1 class="infovis-details-h1 row">
 			<span data-bind="attr: { class: 'infovis-details-thumb icon-' + attributes.icon }"></span>
 			<span data-bind="text: attributes.name"></span>
 		</h1>
-		<button class="infovis-details-button icon-" data-bind="click: $root.details.hide"></button>
+		<button class="infovis-details-button icon-close" data-bind="click: $root.details.hide"></button>
 		<div class="row"  data-bind="visible: $root.auth.editMode">
 			<button class="infovis-button-icon icon-create"></button>
 		</div>

@@ -26,13 +26,21 @@ function Periodic() {
 		});
 	};
 
+	self.slug = function(slugcontent) {
+		var slugcontent_hyphens = slugcontent.replace(/\s/g,'-');
+		var finishedslug = slugcontent_hyphens.replace(/[^a-zA-Z0-9\-]/g,'').toLowerCase();
+		return (finishedslug);
+	}
+
+
 	self.loadChart = function() {
-		var initPath = pager.page.route[1];
+		var initPath = pager.page.route[2];
+		var vm = ko.dataFor(document.body);
+
 		if (initPath) {
 			var chartItem =	_.find(self.charts(), function(chart) {
-				return chart.attributes.name == initPath;
+				return self.slug(chart.attributes.name) == initPath;
 			});
-			var vm = ko.dataFor(document.body);
 			vm.details.load(chartItem);
 		}
 	};

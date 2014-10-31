@@ -1,3 +1,7 @@
 <div class="infovis-header row">
 	<h1 class="infovis-header-h1 large-4 columns">Infoviz</h1>
+	<div class="infovis-header-signin">
+		<button class="infovis-header-signinlink button tiny round" data-bind="visible: !auth.currentUser(), click: auth.signin">Sign in with Facebook</button>
+		<button class="infovis-header-signinlink button tiny round" data-bind="visible: auth.currentUser, click: auth.signout">Sign out</button>
+	</div>
 </div>

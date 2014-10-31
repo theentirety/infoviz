@@ -4,8 +4,23 @@
    ========================================================================== */
 
 .infovis-header {
+	position: relative;
 	.infovis-header-h1 {
 		font-size: 45px;
 		padding: 0 20px;
+	}
+	.infovis-header-signin {
+		position: absolute;
+		right: 0;
+		top: 0;
+		padding-top: 45px;
+		padding-right: 20px;
+		.infovis-header-signinlink {
+			color: #FFF;
+			font-size: 12px;
+			&:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 }

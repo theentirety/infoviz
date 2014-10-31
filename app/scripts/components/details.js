@@ -28,6 +28,12 @@ function Details() {
 		return !item.attributes.do;
 	});
 
+	self.slug = function(slugcontent) {
+		var slugcontent_hyphens = slugcontent.replace(/\s/g,'-');
+		var finishedslug = slugcontent_hyphens.replace(/[^a-zA-Z0-9\-]/g,'').toLowerCase();
+		return (finishedslug);
+	}
+
 	self.show = function(item) {
 		if (self.active()) {
 			if (item.id == self.active().id) {
@@ -39,14 +45,15 @@ function Details() {
 		self.active(item);
 		self.getLinks();
 		self.getDosDonts();
-		pager.navigate('#!/'+item.attributes.name);
+		pager.navigate('#!/chart/'+ self.slug(item.attributes.name));
 	};
 
 	self.load = function(item) {
+		console.log(item)
 		self.active(item);
 		self.getLinks();
 		self.getDosDonts();
-		pager.goTo('#!/'+item.attributes.name);
+		pager.goTo('#!/chart/' + self.slug(item.attributes.name));
 	};
 
 	self.hide = function() {

@@ -130,3 +130,46 @@ Parse.Cloud.define('saveDoDont', function(request, response) {
 	}
 
 });
+
+// saves/updates a link
+Parse.Cloud.define('saveLink', function(request, response) {
+
+	Parse.Cloud.useMasterKey();
+	logging.logAPICall('saveLink', request.params);
+	timestampValid = validation.checkTimestamp(request.params.timestamp);
+
+	if (timestampValid.value) {
+
+		var Link = Parse.Object.extend('Link');
+		var link = new Link();
+
+		if (request.params.id) {
+			link.id = request.params.id;
+		} else if (request.params.vizId) {
+			link.set('title', request.params.title);
+			link.set('url', request.params.url);
+			link.set('vizType', {
+				__type: 'Pointer',
+				className: 'VizType',
+				objectId: request.params.vizId
+			});
+		} else {
+			response.error('Invalid params');
+		}
+
+		doDont.set('description', request.params.description);
+
+		doDont.save(null, {
+			success: function(result) {
+				response.success(result);
+			},
+			error: function(error) {
+				response.error(error);
+			}
+		});
+
+	} else {
+		response.error('Validation failure.');
+	}
+
+});
