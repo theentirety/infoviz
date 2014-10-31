@@ -26,6 +26,8 @@
 		position: absolute;
 		top: 0;
 		right: 0;
+		padding: 15px;
+		font-size: 24px;
 	}
 	.infovis-details-thumb {
 		font-size: 24px;
@@ -49,10 +51,37 @@
 		font-size: 14px;
 		.infovis-details-dolist, .infovis-details-dontlist {
 			margin-bottom: 0.5rem;
+			margin: 0;
+			list-style: none;
 		}
 		.infovis-details-doitem {
 			color: #0B486B;
 			font-size: 14px;
+			margin-left: 18px;
+			text-indent: -18px;
+			padding-bottom: 3px;
+			&>div {
+				display: inline;
+			}
+			&>form {
+				display: inline-table;
+				width: 100%;
+				padding-bottom: 20px;
+			}
+			&::before {
+				content: "\e60f";
+				font-family: 'icomoon';
+				speak: none;
+				font-style: normal;
+				font-weight: normal;
+				font-variant: normal;
+				text-transform: none;
+				line-height: 1;
+
+				/* Better Font Rendering =========== */
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+			}
 		}
 	}
 
@@ -96,6 +125,9 @@
 		border-top: 1px solid fade(#FFF, 40%);
 		.infovis-details-edititem, .infovis-details-editfield {
 			list-style: none;
+		}
+		.infovis-details-editfield {
+			display: none;
 		}
 	}
 	.infovis-details-links, .infovis-details-h1 {

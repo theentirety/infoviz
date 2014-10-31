@@ -13,7 +13,12 @@ function Details() {
 	self.gettingDosDonts = ko.observable(false);
 	self.dosDonts = ko.observableArray();
 	self.editItem = ko.observable(false);
-	self.newDoDont = ko.observable();
+	self.newItem = ko.observable();
+	self.newLinkName = ko.observable();
+	self.newLinkUrl = ko.observable();
+
+	self.oldItem = null;
+	self.oldUrl = null;
 
 	self.doList = self.dosDonts.filter(function(item) {
 		return item.attributes.do;
@@ -55,42 +60,103 @@ function Details() {
 		self.dosDonts([]);
 	};
 
-	self.edit = function(item) {
-		if (!self.editItem()) {
-			self.editItem(true);
-			if (item) {
-
-			} else {
-
-			}
-		}
-	};
-
 	self.DoDont = function(doDont, description) {
 		var item = {};
 		item.attributes = {
 			'do': doDont,
 			'description': description,
-			'editable': ko.observable(false)
+			'editable': ko.observable(false),
+			'editing': ko.observable(false)
 		};
 		return item;
 	};
 
-	self.saveDoDont = function() {
-		if (self.newDoDont()) {
-			self.dosDonts.push(new self.DoDont(true, self.newDoDont()));
-			self.editItem(false);
-			self.newDoDont(null);
-			// api call to save
-			// update the id of the item once the item is saved
-			// enable the edit for that item
+	self.Link = function(title, url) {
+		var item = {};
+		item.attributes = {
+			'title': title,
+			'url': url,
+			'editable': ko.observable(false),
+			'editing': ko.observable(false)
+		};
+		return item;
+	};
+
+	self.save = function(item, form, listType) {
+		// 	// api call to save
+		// 	// update the id of the item once the item is saved
+		// 	// enable the edit for that item
+		if (item) {
+			item.attributes.editing(false);
 		} else {
-			self.cancelEdit();
+			var target = $(form).parents('.infovis-details-editfield');
+			target.hide();
+			target.prev().show();
+			self.dosDonts.push(new self.DoDont(listType == 'do' ? true : false, self.newItem()));
+			self.newItem(null);
+		}
+		self.editItem(false);
+	};
+
+	self.edit = function(item, e) {
+		if (item) {
+			self.editItem(true);
+			self.oldItem = item.attributes.description();
+			item.attributes.editing(true);
+		} else {
+			var target = $(e.currentTarget);
+			target.hide();
+			target.next().show();
+			self.editItem(true);
 		}
 	};
 
-	self.cancelEdit = function() {
-		self.newDoDont(null);
+	self.cancelEdit = function(item, e) {
+		if (item) {
+			item.attributes.description(self.oldItem);
+			item.attributes.editing(false);
+		} else {
+			var target = $(e.currentTarget).parents('.infovis-details-editfield');
+			target.hide();
+			target.prev().show();
+			self.newItem(null);
+		}
+		self.editItem(false);
+	};
+
+	self.editLink = function(item, e) {
+		if (item) {
+			self.oldItem = item.attributes.title();
+			self.oldUrl = item.attributes.url();
+			item.attributes.editing(true);
+		} else {
+			var target = $(e.currentTarget);
+			target.hide();
+			target.next().show();
+		}
+		self.editItem(true);
+	};
+
+	self.cancelEditLink = function(item) {
+		if (item) {
+			item.attributes.title(self.oldItem);
+			item.attributes.url(self.oldUrl);
+			item.attributes.editing(false);
+		} else {
+			self.newLinkUrl(null);
+			self.newLinkName(null);
+		}
+		self.editItem(false);
+	};
+
+	self.saveLink = function(item) {
+		if (item) {
+			item.attributes.editing(false);
+		} else if (self.newLinkName() && self.newLinkUrl()) {
+			self.links.push(new self.Link(self.newLinkName(), self.newLinkUrl()));
+			self.newLinkUrl(null);
+			self.newLinkName(null);
+		}
 		self.editItem(false);
 	};
 
@@ -101,6 +167,12 @@ function Details() {
 			timestamp: moment.utc().valueOf()
 		}, {
 			success: function(result) {
+				_.each(result, function(item) {
+					item.attributes.editable = ko.observable(true);
+					item.attributes.editing = ko.observable(false);
+					item.attributes.title = ko.observable(item.attributes.title);
+					item.attributes.url = ko.observable(item.attributes.url);
+				});
 				self.gettingLinks(false);
 				self.links(result);
 			},
@@ -119,6 +191,8 @@ function Details() {
 			success: function(result) {
 				_.each(result, function(item) {
 					item.attributes.editable = ko.observable(true);
+					item.attributes.editing = ko.observable(false);
+					item.attributes.description = ko.observable(item.attributes.description);
 				});
 				self.dosDonts(result);
 				self.gettingDosDonts(false);
