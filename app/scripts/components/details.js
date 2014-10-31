@@ -210,7 +210,6 @@ function Details() {
 
 	self.saveLink = function(item) {
 		if (item) {
-			console.log(item)
 			item.attributes.editing(false);
 			Parse.Cloud.run('saveLink', {
 				id: item.id,

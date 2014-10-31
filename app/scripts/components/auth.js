@@ -14,6 +14,9 @@ function Auth() {
 		var currentUser = Parse.User.current();
 		if (currentUser) {
 			self.currentUser(currentUser);
+			if (currentUser.attributes.admin) {
+				self.editMode(true);
+			}
 		}
 	};
 
@@ -34,6 +37,7 @@ function Auth() {
 	self.signout = function() {
 		Parse.User.logOut();
 		self.currentUser(null);
+		self.editMode(false);
 		pager.navigate('');
 	};
 
