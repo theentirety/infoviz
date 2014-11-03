@@ -95,8 +95,9 @@ Parse.Cloud.define('saveDoDont', function(request, response) {
 	Parse.Cloud.useMasterKey();
 	logging.logAPICall('saveDoDont', request.params);
 	timestampValid = validation.checkTimestamp(request.params.timestamp);
+	userValid = validation.checkUserLoggedIn();
 
-	if (timestampValid.value) {
+	if (timestampValid.value && userValid) {
 
 		var DoDont = Parse.Object.extend('DoDont');
 		var doDont = new DoDont();
@@ -137,8 +138,9 @@ Parse.Cloud.define('saveLink', function(request, response) {
 	Parse.Cloud.useMasterKey();
 	logging.logAPICall('saveLink', request.params);
 	timestampValid = validation.checkTimestamp(request.params.timestamp);
+	userValid = validation.checkUserLoggedIn();
 
-	if (timestampValid.value) {
+	if (timestampValid.value && userValid) {
 
 		var Link = Parse.Object.extend('Link');
 		var link = new Link();
@@ -180,19 +182,21 @@ Parse.Cloud.define('saveViz', function(request, response) {
 	Parse.Cloud.useMasterKey();
 	logging.logAPICall('saveViz', request.params);
 	timestampValid = validation.checkTimestamp(request.params.timestamp);
+	userValid = validation.checkUserLoggedIn();
 
-	if (timestampValid.value) {
+	if (timestampValid.value && userValid) {
 
 		var VizType = Parse.Object.extend('VizType');
 		var viz = new VizType();
 
 		if (request.params.id) {
 			viz.id = request.params.id;
+			viz.set('description', request.params.description);
+		} else if (request.params.name) {
+			viz.set('name', request.params.name);
 		} else {
 			response.error('Invalid params');
 		}
-
-		viz.set('description', request.params.description);
 
 		viz.save(null, {
 			success: function(result) {
@@ -202,6 +206,72 @@ Parse.Cloud.define('saveViz', function(request, response) {
 				response.error(error);
 			}
 		});
+
+	} else {
+		response.error('Validation failure.');
+	}
+
+});
+
+// removes a link from the database
+Parse.Cloud.define('deleteLink', function(request, response) {
+
+	Parse.Cloud.useMasterKey();
+	logging.logAPICall('deleteLink', request.params);
+	timestampValid = validation.checkTimestamp(request.params.timestamp);
+	userValid = validation.checkUserLoggedIn();
+
+	if (timestampValid.value && userValid) {
+
+		var Link = Parse.Object.extend('Link');
+		var link = new Link();
+
+		if (request.params.id) {
+			link.id = request.params.id;
+			link.destroy({
+				success: function() {
+					response.success();
+				},
+				error: function(error) {
+					response.error(error);
+				}
+			});
+		} else {
+			response.error('Invalid params');
+		}
+
+	} else {
+		response.error('Validation failure.');
+	}
+
+});
+
+// removes a do/dont from the database
+Parse.Cloud.define('deleteDoDont', function(request, response) {
+
+	Parse.Cloud.useMasterKey();
+	logging.logAPICall('deleteDoDont', request.params);
+	timestampValid = validation.checkTimestamp(request.params.timestamp);
+	userValid = validation.checkUserLoggedIn();
+
+	if (timestampValid.value && userValid) {
+
+		var DoDont = Parse.Object.extend('DoDont');
+		var doDont = new DoDont();
+
+		if (request.params.id) {
+			doDont.id = request.params.id;
+			doDont.destroy({
+				success: function() {
+					response.success();
+				},
+				error: function(error) {
+					response.error(error);
+				}
+			});
+		} else {
+			response.error('Invalid params');
+		}
 
 	} else {
 		response.error('Validation failure.');

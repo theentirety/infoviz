@@ -31,6 +31,28 @@ function Periodic() {
 		});
 	};
 
+	self.new = function() {
+		var newName = window.prompt('Please enter the name of the new visualization.');
+		if (newName.length >= 3) {
+			Parse.Cloud.run('saveViz', {
+				name: newName,
+				timestamp: moment.utc().valueOf()
+			}, {
+				success: function(result) {
+					result.attributes.editable = ko.observable(true);
+					result.attributes.editing = ko.observable(false);
+					result.attributes.description = ko.observable(result.attributes.description);
+					self.charts.push(result);
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+		} else {
+			alert('The name must be at least 3 characters in length.')
+		}
+	};
+
 	self.slug = function(slugcontent) {
 		var slugcontent_hyphens = slugcontent.replace(/\s/g,'-');
 		var finishedslug = slugcontent_hyphens.replace(/[^a-zA-Z0-9\-]/g,'').toLowerCase();

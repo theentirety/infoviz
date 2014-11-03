@@ -2,9 +2,14 @@
 	<!-- ko if: periodic.charts().length <= 0 && periodic.gettingCharts() -->
 	<div class="infovis-spinner icon-remove"></div>
 	<!-- /ko -->
-	<ul class="infovis-periodic-ul small-block-grid-2 medium-block-grid-4" data-bind="foreach: periodic.charts">
+	<ul class="infovis-periodic-ul small-block-grid-2 medium-block-grid-4">
+		<!-- ko foreach: periodic.charts -->
 		<li class="infovis-periodic-li" data-bind="event: { mouseover: function(data, event) { $root.tooltip.mouseover(data, event) }, mouseout: function() { $root.tooltip.show(false) } }, click: function(data) { $root.details.show(data), $root.tooltip.show(false); }">
-			<div class="infovis-periodic-image" data-bind="css: 'icon-' + attributes.icon"></div>
+			<div class="infovis-periodic-image" data-bind="css: 'icon-' + (attributes.icon ? attributes.icon : 'settings')"></div>
+		</li>
+		<!-- /ko -->
+		<li class="infovis-periodic-li infovis-periodic-new" data-bind="click: periodic.new, visible: auth.editMode() && !details.editItem() && !details.newLink()">
+			<div class="infovis-periodic-image icon-add-circle-outline"></div>
 		</li>
 	</ul>
 </div>

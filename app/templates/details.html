@@ -6,7 +6,7 @@
 		</h1>
 		<button class="infovis-details-button icon-close" data-bind="click: $root.details.hide"></button>
 		<div class="infovis-details-description row">
-			<span class="large-8 columns" data-bind="text: attributes.description() ? attributes.description() : 'No description provided', visible: !attributes.editing()"></span>
+			<span class="large-8 columns" data-bind="text: attributes.description() ? attributes.description() : 'No description provided', visible: !attributes.editing(), css: { 'infovis-details-empty': !attributes.description() }"></span>
 			<form data-bind="submit: $root.details.saveDescription, visible: attributes.editing">
 				<textarea class="infovis-details-vizdescription" data-bind="value: attributes.description"></textarea>
 				<button type="submit" class="infovis-button-icon icon-check"></button>
@@ -19,7 +19,7 @@
 			<div class="infovis-spinner icon-remove"></div>
 			<!-- /ko -->
 			<!-- ko if: dosDonts().length <= 0 && !gettingDosDonts() && !$root.auth.editMode() -->
-			<div class="infovis-details-empty">Do or do not, but in this case, there is no guidance</div>
+			<div class="infovis-details-empty">No dos or do nots</div>
 			<!-- /ko -->
 			<!-- ko if: dosDonts().length > 0 || ($root.auth.editMode() && !gettingDosDonts() )-->
 			<div class="large-6 columns infovis-details-withplus">
@@ -40,6 +40,7 @@
 			<div class="infovis-details-empty">No resource links</div>
 			<!-- /ko -->
 			<!-- ko if: links().length > 0 || $root.auth.editMode -->
+			<h2 class="infovis-details-h2">Resources</h2>
 			<ol class="infovis-details-linklist">
 				<!-- ko foreach: links -->
 				<li class="infovis-details-linkitem">
@@ -53,22 +54,21 @@
 						<input type="text" placeholder="New link URL..." data-bind="value: attributes.url" />
 						<button type="submit" class="infovis-button-icon icon-check"></button>
 						<button type="button" class="infovis-button-icon icon-close" data-bind="click: $parent.cancelEditLink"></button>
+						<button type="button" class="infovis-button-icon icon-delete" data-bind="click: $parent.trashLink"></button>
 					</form>
 				</li>
 				<!-- /ko -->
-				<li class="infovis-details-edititem" data-bind="visible: $root.auth.editMode() && !editItem(), click: function(item, e) { editLink(null, e) }">
-					<button class="infovis-button-icon icon-add-circle-outline infovis-edit-plus"></button>
-				</li>
-				<li class="infovis-details-editfield" data-bind="visible: $root.auth.editMode() && editItem()">
-					<form data-bind="submit: function() { saveLink(null) }">
-						<input type="text" placeholder="New link name..." data-bind="value: newLinkName" />
-						<input type="text" placeholder="New link URL..." data-bind="value: newLinkUrl" />
-						<button type="submit" class="infovis-button-icon icon-check"></button>
-						<button type="button" class="infovis-button-icon icon-close" data-bind="click: function() { cancelEditLink(null) }"></button>
-					</form>
-				</li>
 			</ol>
+			<div class="infovis-details-edititem" data-bind="visible: $root.auth.editMode() && !editItem() && !newLink(), click: function(item, e) { editLink(null, e) }">
+				<button class="infovis-button-icon icon-add-circle-outline infovis-edit-plus"></button>
+			</div>
 			<!-- /ko -->
+			<form data-bind="submit: function() { saveLink(null) }, visible: $root.auth.editMode() && !editItem() && newLink()">
+				<input type="text" placeholder="New link name..." data-bind="value: newLinkName" />
+				<input type="text" placeholder="New link URL..." data-bind="value: newLinkUrl" />
+				<button type="submit" class="infovis-button-icon icon-check"></button>
+				<button type="button" class="infovis-button-icon icon-close" data-bind="click: function() { cancelEditLink(null) }"></button>
+			</form>
 		</div>
 	</div>
 </div>
@@ -86,6 +86,7 @@
 			<input type="text" placeholder="New item..." data-bind="value: attributes.description" />
 			<button type="submit" class="infovis-button-icon icon-check"></button>
 			<button type="button" class="infovis-button-icon icon-close" data-bind="click: $root.details.cancelEdit"></button>
+			<button type="button" class="infovis-button-icon icon-delete" data-bind="click: $root.details.trashDoDont"></button>
 		</form>
 	</li>
 	<!-- /ko -->

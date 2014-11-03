@@ -16,6 +16,7 @@ function Details() {
 	self.newItem = ko.observable();
 	self.newLinkName = ko.observable();
 	self.newLinkUrl = ko.observable();
+	self.newLink = ko.observable(false);
 
 	self.oldItem = null;
 	self.oldUrl = null;
@@ -170,6 +171,25 @@ function Details() {
 		}
 	};
 
+	self.trashDoDont = function(item) {
+		var confirm = window.confirm('Are you sure?');
+		if (confirm) {
+			self.dosDonts.remove(item);
+			self.editItem(false);
+			Parse.Cloud.run('deleteDoDont', {
+				id: item.id,
+				timestamp: moment.utc().valueOf()
+			}, {
+				success: function(result) {
+					console.log('item deleted')
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+		}
+	};
+
 	self.cancelEdit = function(item, e) {
 		if (item) {
 			item.attributes.description(self.oldItem);
@@ -188,12 +208,10 @@ function Details() {
 			self.oldItem = item.attributes.title();
 			self.oldUrl = item.attributes.url();
 			item.attributes.editing(true);
+			self.editItem(true);
 		} else {
-			var target = $(e.currentTarget);
-			target.hide();
-			target.next().show();
+			self.newLink(true);
 		}
-		self.editItem(true);
 	};
 
 	self.cancelEditLink = function(item) {
@@ -201,11 +219,31 @@ function Details() {
 			item.attributes.title(self.oldItem);
 			item.attributes.url(self.oldUrl);
 			item.attributes.editing(false);
+			self.editItem(false);
 		} else {
 			self.newLinkUrl(null);
 			self.newLinkName(null);
+			self.newLink(false);
 		}
-		self.editItem(false);
+	};
+
+	self.trashLink = function(item) {
+		var confirm = window.confirm('Are you sure?');
+		if (confirm) {
+			self.links.remove(item);
+			self.editItem(false);
+			Parse.Cloud.run('deleteLink', {
+				id: item.id,
+				timestamp: moment.utc().valueOf()
+			}, {
+				success: function(result) {
+					console.log('item deleted')
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+		}
 	};
 
 	self.saveLink = function(item) {
@@ -245,7 +283,7 @@ function Details() {
 			self.newLinkName(null);
 		}
 
-		self.editItem(false);
+		self.newLink(false);
 	};
 
 	self.getLinks = function() {
